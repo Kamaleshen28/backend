@@ -1,10 +1,18 @@
 {
   "development": {
-    "username": "root",
+    "username": "Kamaleshen_S",
     "password": "kamalsasi28",
-    "database": "fullStackDatabase",
+    "database": "backendDatabase",
     "host": "127.0.0.1",
     "dialect": "postgres"
+  },
+  "docker": {
+    "username": "Kamaleshen_S",
+    "password": "kamalsasi28",
+    "database": "backendDatabase",
+    "host": "backenddb",
+    "dialect": "postgres",
+    "port":5432
   },
   "test": {
     "username": "root",
