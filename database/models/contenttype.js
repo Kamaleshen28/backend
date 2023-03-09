@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true
     },
-    contentSchema: DataTypes.STRING
+    contentSchema: DataTypes.JSON
   }, {
     sequelize,
     modelName: 'contentType',

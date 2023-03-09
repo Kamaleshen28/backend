@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   collectionValue.init({
     contentId: DataTypes.INTEGER,
-    instanceValues: DataTypes.STRING
+    instanceValues: DataTypes.JSON
   }, {
     sequelize,
     modelName: 'collectionValue',

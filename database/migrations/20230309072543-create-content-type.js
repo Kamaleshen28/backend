@@ -10,10 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       contentName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       contentSchema: {
-        type: Sequelize.STRING
+        type: Sequelize.JSON
       },
       createdAt: {
         allowNull: false,
