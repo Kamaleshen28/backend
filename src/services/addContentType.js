@@ -57,7 +57,6 @@ const getAllInstances = async (contentId) => {
 };
 
 const addFieldToSchema = async (id, newField) => {
-  console.log('VVVV', id, newField);
   const allContent = await contentType.findOne({
     attributes: ['contentSchema'],
     where: { id }

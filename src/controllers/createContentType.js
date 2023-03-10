@@ -46,7 +46,6 @@ const getAllContentTypesData = async (req, res) => {
 const getAllContentTypesInstanceValue = async (req, res) => {
   try {
     const data = Number(req.params.contentId);
-    console.log('PPP', data);
     const result = await services.getAllInstances(data);
     res.status(200).json({ message: result });
   } catch (error) {
@@ -60,7 +59,6 @@ const getAllContentTypesInstanceValue = async (req, res) => {
 
 const addFieldToContentSchema = async (req, res) => {
   try {
-    console.log('KKK', req.body);
     const { contentId, field } = req.body.newFieldName;
     const result = await services.addFieldToSchema(contentId, field);
     res.status(200).json({ message: result });
@@ -89,7 +87,6 @@ const deleteFieldToContentSchema = async (req, res) => {
 
 const getContentDataByName = async (req, res) => {
   try {
-    console.log('RERE: ', req.params);
     const { contentName } = req.params;
     const result = await services.getContentData(contentName);
     res.status(200).json({ message: result });
@@ -103,7 +100,6 @@ const getContentDataByName = async (req, res) => {
 };
 const deleteInstanceById = async (req, res) => {
   try {
-    console.log('RERE: ', req.params);
     const { id } = req.params;
     const result = await services.deleteInstance(Number(id));
     res.status(200).json({ message: result });
@@ -117,7 +113,6 @@ const deleteInstanceById = async (req, res) => {
 };
 const editFieldName = async (req, res) => {
   try {
-    console.log('WEWE', req.body);
     const { contentId, oldField, newField } = req.body.newFieldName;
     const result = await services.editField(Number(contentId), oldField, newField);
     res.status(200).json({ message: result });
@@ -132,7 +127,6 @@ const editFieldName = async (req, res) => {
 
 const upadteInstanceValueById = async (req, res) => {
   try {
-    console.log('WEWE', req.params);
     const { id } = req.params;
     const { instanceValues } = req.body;
     const result = await services.updateInstance(Number(id), instanceValues);
