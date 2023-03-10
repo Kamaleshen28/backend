@@ -27,7 +27,7 @@ const addInstanceValueToDatabase = async (data) => {
   });
 
   if (existingInstance.length != 0) {
-    throw new httpError('Instance alredy exists', 403);
+    throw new httpError('Instance alredy exists', 200);
   }
   const response = await collectionValue.create(data);
   return response;
@@ -38,7 +38,7 @@ const getAllContentTypeNames = async () => {
     attributes: ['id', 'contentName', 'contentSchema']
   });
   if (allContent.length === 0) {
-    throw new httpError('No content types exist', 404);
+    throw new httpError('No content types exist', 200);
   }
 
   return allContent;
@@ -49,14 +49,16 @@ const getAllInstances = async (contentId) => {
     attributes: ['id', 'contentId', 'instanceValues'],
     where: { contentId }
   });
-  if (allContent.length === 0) {
-    throw new httpError('No Instance of this content type exist', 404);
-  }
+  console.log('CAME HERE', allContent);
+  // if (allContent.length === 0) {
+  //   throw new httpError('No Instance of this content type exist', 404);
+  // }
 
   return allContent;
 };
 
 const addFieldToSchema = async (id, newField) => {
+  console.log('VVVV', id, newField);
   const allContent = await contentType.findOne({
     attributes: ['contentSchema'],
     where: { id }
@@ -92,6 +94,7 @@ const deleteFieldToSchema = async (id, newField) => {
     attributes: ['contentSchema'],
     where: { id }
   });
+  console.log('CHECK11', allContent);
   const schema = allContent.dataValues.contentSchema;
   console.log('SEC: ', newField);
   delete schema[newField];
@@ -99,11 +102,14 @@ const deleteFieldToSchema = async (id, newField) => {
   const response = await contentType.update({ contentSchema: schema }, {
     where: { id }
   });
-  deleteFieldFromInstanceValues(id, newField);
+  console.log('WORKING TILL HERE');
+  await deleteFieldFromInstanceValues(id, newField);
+  console.log('CHECK22', allContent);
 
   if (!allContent) {
-    throw new httpError('No Instance of this content type exist', 404);
+    throw new httpError('No Instance of this content type exist', 200);
   }
+  console.log('IMININ: ', allContent);
   return response;
 };
 
@@ -130,6 +136,62 @@ const getContentData = async (contentName) => {
   return response;
 };
 
+const deleteInstance = async (id) => {
+  const response = await collectionValue.destroy({ where: { id } });
+  console.log('***', 'GOTGOT', response);
+  return response;
+};
+
+const editField = async (id, oldField, newField) => {
+  console.log('STRAT', id, oldField, newField);
+  const allContent = await contentType.findOne({
+    attributes: ['contentSchema'],
+    where: { id }
+  });
+  console.log('CHECK11', allContent);
+  const schema = allContent.dataValues.contentSchema;
+  console.log('SEC: ', newField);
+  delete schema[oldField];
+  console.log('SEC: ', schema);
+  schema[newField] = '';
+  const response = await contentType.update({ contentSchema: schema }, {
+    where: { id }
+  });
+  console.log('WORKING TILL HERE');
+  await editFieldFromInstanceValues(id, oldField, newField);
+  console.log('CHECK22', allContent);
+
+  if (!allContent) {
+    throw new httpError('No Instance of this content type exist', 200);
+  }
+  console.log('IMININ: ', allContent);
+  return response;
+};
+
+
+const editFieldFromInstanceValues = async (contentId, oldField, newField) => {
+  const allInstanceData = await getAllInstances(contentId);
+  for (const data of allInstanceData) {
+    const { instanceValues, id } = data.dataValues;
+    const value = instanceValues[oldField];
+    delete instanceValues[oldField];
+    instanceValues[newField] = value;
+    const response = await collectionValue.update({ instanceValues }, {
+      where: { id }
+    });
+    console.log('1>>:', response);
+  }
+};
+
+const updateInstance = async (id, instanceValues) => {
+  const response = await collectionValue.update({ instanceValues }, {
+    where: { id }
+  });
+  console.log('1>>:', response);
+  return response;
+};
+
+
 module.exports = {
   addContentTypeToDatabase,
   addInstanceValueToDatabase,
@@ -137,5 +199,8 @@ module.exports = {
   getAllInstances,
   addFieldToSchema,
   deleteFieldToSchema,
-  getContentData
+  getContentData,
+  deleteInstance,
+  editField,
+  updateInstance
 };
