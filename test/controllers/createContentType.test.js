@@ -314,7 +314,7 @@ describe('Controllers', () => {
     it('should return 404 and a message when no instance of this content type exist', async () => {
       jest.spyOn(services, 'getContentData').mockRejectedValue(new httpError('No Instance of this content type exist', 200));
       const mockReq = {
-        body: { contentId: 1, field: 'newWorth' }
+        params: { contentName: 'mockName' }
       };
       const mockRes = {
         status: jest.fn().mockReturnThis(),
@@ -327,13 +327,147 @@ describe('Controllers', () => {
     it('should return 500 and a message when there is internal db error', async () => {
       jest.spyOn(services, 'getContentData').mockRejectedValue(new Error('something went wrong', 500));
       const mockReq = {
-        body: { contentId: 1, field: 'newWorth' }
+        params: { contentName: 'mockName' }
       };
       const mockRes = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn()
       };
       await controllers.getContentDataByName(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(500);
+      expect(mockRes.json).toBeCalledWith({ message: 'something went wrong' });
+    });
+
+  });
+  describe('deleteInstanceById', () => {
+    it('should return 200 with a message when data is deleted', async () => {
+      jest.spyOn(services, 'deleteInstance').mockResolvedValue([1]);
+      const mockReq = {
+        params: { id: 20 }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.deleteInstanceById(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(200);
+      expect(mockRes.json).toBeCalledWith({ message: [1] });
+    });
+
+    it('should return 500 and a message when there is internal db error', async () => {
+      jest.spyOn(services, 'deleteInstance').mockRejectedValue(new Error('something went wrong', 500));
+      const mockReq = {
+        params: { id: 20 }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.deleteInstanceById(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(500);
+      expect(mockRes.json).toBeCalledWith({ message: 'something went wrong' });
+    });
+
+  });
+
+  describe('editFieldName', () => {
+    it('should return 200 with a message when data is edited', async () => {
+      jest.spyOn(services, 'editField').mockResolvedValue([1]);
+      const mockReq = {
+        body: { newFieldName: { contentId: '1', oldField: 'rank', newField: 'rating' } }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.editFieldName(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(200);
+      expect(mockRes.json).toBeCalledWith({ message: [1] });
+    });
+
+    it('should return 200 and a message when there is No Instance of the content', async () => {
+      jest.spyOn(services, 'editField').mockRejectedValue(new httpError('No Instance of this content type exist', 200));
+      const mockReq = {
+        body: { newFieldName: { contentId: '1', oldField: 'rank', newField: 'rating' } }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.editFieldName(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(200);
+      expect(mockRes.json).toBeCalledWith({ message: 'No Instance of this content type exist' });
+    });
+    it('should return 500 and a message when there is db error', async () => {
+      jest.spyOn(services, 'editField').mockRejectedValue(new Error('something went wrong', 500));
+      const mockReq = {
+        body: { newFieldName: { contentId: '1', oldField: 'rank', newField: 'rating' } }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.editFieldName(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(500);
+      expect(mockRes.json).toBeCalledWith({ message: 'something went wrong' });
+    });
+
+  });
+  describe('upadteInstanceValueById', () => {
+    it('should return 200 with a message when data is updated', async () => {
+      jest.spyOn(services, 'updateInstance').mockResolvedValue([1]);
+      const mockReq = {
+        params: { id: 2 },
+        body: { instanceValues: {} }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.upadteInstanceValueById(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(200);
+      expect(mockRes.json).toBeCalledWith({ message: [1] });
+    });
+    it('should return 500 and a message when there is db error', async () => {
+      jest.spyOn(services, 'updateInstance').mockRejectedValue(new Error('something went wrong', 500));
+      const mockReq = {
+        params: { id: 2 },
+        body: { instanceValues: {} }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.upadteInstanceValueById(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(500);
+      expect(mockRes.json).toBeCalledWith({ message: 'something went wrong' });
+    });
+
+  });
+  describe('updateContentTypeName', () => {
+    it('should return 200 with a message when data is updated', async () => {
+      jest.spyOn(services, 'updateContentName').mockResolvedValue([1]);
+      const mockReq = {
+        body: { id: 2, contentName: 'mockName' }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.updateContentTypeName(mockReq, mockRes);
+      expect(mockRes.status).toBeCalledWith(200);
+      expect(mockRes.json).toBeCalledWith({ message: [1] });
+    });
+    it('should return 500 and a message when there is db error', async () => {
+      jest.spyOn(services, 'updateContentName').mockRejectedValue(new Error('something went wrong', 500));
+      const mockReq = {
+        body: { id: 2, contentName: 'mockName' }
+      };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await controllers.updateContentTypeName(mockReq, mockRes);
       expect(mockRes.status).toBeCalledWith(500);
       expect(mockRes.json).toBeCalledWith({ message: 'something went wrong' });
     });
