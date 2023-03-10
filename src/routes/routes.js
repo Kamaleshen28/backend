@@ -30,5 +30,7 @@ router.delete('/delete/instance/:id', middleware.validateJWT, controllers.delete
 router.put('/upadte/contenttype/schema/name', middleware.validateJWT, controllers.editFieldName);
 router.put('/upadte/instance/:id', middleware.validateJWT, controllers.upadteInstanceValueById);
 router.post('/create/contenttype', middleware.validateJWT, controllers.createContentType);
+// router.post('/update/contenttype/name', middleware.validateJWT, controllers.updateContentTypeName);
+router.put('/update/contenttype/name', controllers.updateContentTypeName);
 
 module.exports = router;

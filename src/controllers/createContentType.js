@@ -131,12 +131,27 @@ const editFieldName = async (req, res) => {
     }
   }
 };
+
 const upadteInstanceValueById = async (req, res) => {
   try {
     console.log('WEWE', req.params);
     const { id } = req.params;
     const { instanceValues } = req.body;
     const result = await services.updateInstance(Number(id), instanceValues);
+    res.status(200).json({ message: result });
+  } catch (error) {
+    if (error instanceof httpError) {
+      res.status(error.code).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
+  }
+};
+
+const updateContentTypeName = async (req, res) => {
+  try {
+    const { id, contentName } = req.body;
+    const result = await services.updateContentName(Number(id), contentName);
     res.status(200).json({ message: result });
   } catch (error) {
     if (error instanceof httpError) {
@@ -157,5 +172,6 @@ module.exports = {
   getContentDataByName,
   deleteInstanceById,
   editFieldName,
-  upadteInstanceValueById
+  upadteInstanceValueById,
+  updateContentTypeName
 };

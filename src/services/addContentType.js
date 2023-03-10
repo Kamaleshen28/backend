@@ -191,6 +191,13 @@ const updateInstance = async (id, instanceValues) => {
   return response;
 };
 
+const updateContentName = async (id, contentName) => {
+  const response = await contentType.update({ contentName }, {
+    where: { id }
+  });
+  return response;
+};
+
 
 module.exports = {
   addContentTypeToDatabase,
@@ -202,5 +209,6 @@ module.exports = {
   getContentData,
   deleteInstance,
   editField,
-  updateInstance
+  updateInstance,
+  updateContentName
 };
