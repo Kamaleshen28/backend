@@ -1,5 +1,4 @@
 const { contentType, collectionValue } = require('../../database/models');
-const { all } = require('../routes/routes');
 const httpError = require('../utils/httpError');
 
 

@@ -5,7 +5,6 @@ const createContentType = async (req, res) => {
   try {
 
     const data = req.body;
-    console.log('1', req.body);
     const result = await services.addContentTypeToDatabase(data);
     res.status(201).json({ message: result });
   } catch (error) {
@@ -20,7 +19,6 @@ const createContentType = async (req, res) => {
 const createInstance = async (req, res) => {
   try {
     const data = req.body;
-    console.log('QQ: ', data);
     const result = await services.addInstanceValueToDatabase(data);
     res.status(201).json({ message: result });
   } catch (error) {

@@ -9,7 +9,9 @@ const validateJWT = async (req, res, next) => {
     var data = '';
 
     const response = await axios.post(
-      'http://localhost:7000/validate/token',
+      // 'http://localhost:7000/validate/token',
+      // eslint-disable-next-line no-undef
+      `${process.env.AUTH_SERVER_HOST}validate/token`,
       { data },
       {
         headers: {
