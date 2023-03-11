@@ -31,7 +31,7 @@ GET:
 4. To get the data about the content type given content name
 5. To get all the content types data
 
-PUT
+PUT:
 6. To add the field to the schema of the given content type
 7. To delete the field to the schema of the given content type
 8. To edit the field name of the content type
